@@ -3,10 +3,7 @@ Online marketplace
 
 Idea - online marketplace (like prom, etc.)
 
-Entities: Anonimous user, Logged user, Seller, Moderator, Administrator 
-
-Anonimous user possibilities:
- - products review
+Entities: Logged user, Seller, Moderator, Administrator 
 
 Logged user:
  - Anonimous user possibilities
