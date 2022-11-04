@@ -18,7 +18,7 @@ Seller possibilities:
  - Make sale announcement
 
 Moderator possibilities:
- - Seller possibilities
+ - Logged user possibilities
  - Delete sale announcement
  - Checking users profile
 
