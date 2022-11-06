@@ -1,4 +1,4 @@
-namespace market.Models
+namespace market.Host.Models
 {
     public class ErrorViewModel
     {

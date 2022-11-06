@@ -1,6 +1,7 @@
 ﻿using market.Domain.Const;
+using market.Domain.DataModels.Product;
 
-namespace market.Host.Models
+namespace market.Domain.DataModels.User
 {
     public class UserModel
     {
@@ -9,6 +10,6 @@ namespace market.Host.Models
         public string UserName { get; set; }
         public UserType UserType { get; set; }
 
-        public List<ProductModel> ProductModels { get; set; }
+        public List<ProductEntity> ProductModels { get; set; }
     }
 }

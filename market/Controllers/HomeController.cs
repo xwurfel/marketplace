@@ -1,8 +1,8 @@
-﻿using market.Models;
+﻿using market.Host.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace market.Controllers
+namespace market.Host.Controllers
 {
     public class HomeController : Controller
     {

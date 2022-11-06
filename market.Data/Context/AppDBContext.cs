@@ -1,16 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using market.Models;
-using market.Models.DataModels;
+using market.Domain.DataModels;
+using market.Domain.DataModels.User;
+using market.Domain.DataModels.Product;
+using market.Domain.DataModels.Category;
 
-namespace market.Data
+namespace market.Data.Context
 {
-    public class AppDBContext: DbContext
+    public class AppDBContext : DbContext
     {
         public DbSet<UserModel> Users { get; set; }
 
-        public DbSet<ProductModel> Products { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
 
-        public DbSet<CategoryModel> Categories { get; set; }
+        public DbSet<CategoryEntity> Categories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,7 +30,7 @@ namespace market.Data
             modelBuilder.Entity<UserModel>().Property(x => x.UserName).HasMaxLength(64);
 
 
-            modelBuilder.Entity<ProductCategoryModel>().HasKey(t => new { t.ProductId, t.CategoryID });
+            modelBuilder.Entity<ProductCategoryModel>().HasKey(t => new { t.ProductId, t.CategoryId });
 
             modelBuilder.Entity<ProductCategoryModel>()
             .HasOne(pt => pt.Product)
@@ -38,7 +40,7 @@ namespace market.Data
             modelBuilder.Entity<ProductCategoryModel>()
                 .HasOne(pt => pt.Category)
                 .WithMany(t => t.Products)
-                .HasForeignKey(pt => pt.CategoryID);
+                .HasForeignKey(pt => pt.CategoryId);
         }
     }
 }

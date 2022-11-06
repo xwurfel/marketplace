@@ -1,4 +1,6 @@
-﻿namespace market.Models.DataModels
+﻿using market.Domain.DataModels;
+
+namespace market.Host.Models
 {
     public class ProductModel
     {
