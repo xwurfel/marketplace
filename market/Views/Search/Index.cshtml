@@ -19,7 +19,15 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <div class="card" style="width: 18rem;">
+                <img src="https://images.unsplash.com/photo-1546587348-d12660c30c50?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8bmF0dXJhbHxlbnwwfHwwfHw%3D&w=1000&q=80" class="card-img-top" alt="nature">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+            @*<tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
@@ -29,7 +37,7 @@
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
-            </tr>
+            </tr>*@
         }
     </tbody>
 </table>
