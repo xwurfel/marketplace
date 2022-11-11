@@ -1,6 +1,7 @@
 ﻿using market.Domain.DataModels;
+using market.Host.Models.Users;
 
-namespace market.Host.Models
+namespace market.Host.Models.Products
 {
     public class ProductModel
     {

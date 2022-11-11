@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using market.Domain.DataModels.Product;
-using market.Host.Models;
+using market.Host.Models.Products;
 
 namespace market.Host.Mapping
 {
