@@ -1,6 +1,6 @@
 ﻿using market.Domain.DataModels;
 
-namespace market.Host.Models
+namespace market.Host.Models.Categories
 {
     public class CategoryModel
     {

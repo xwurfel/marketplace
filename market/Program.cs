@@ -1,5 +1,7 @@
 using market.Data.Context;
 using AutoMapper;
+using market.Data.Contracts.Repositories.Products;
+using market.Data.Repositories.Products;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,7 @@ builder.Services.AddTransient<AppDBContext>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddTransient<IProductRepository, ProductRepository>();
 
 
 var app = builder.Build();
@@ -28,6 +31,11 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+
+app.MapControllerRoute(
+    name: "search",
+    pattern: "{controller=Search}/{action=Index}/{request?}");
 
 app.MapControllerRoute(
     name: "default",
