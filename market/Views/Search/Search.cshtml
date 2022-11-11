@@ -1,9 +1,10 @@
-﻿
+﻿@using market.Host.Models.Products
+
 @{
     ViewData["Title"] = "Index";
 }
 
-@model List<market.Host.Models.ProductModel>
+@model List<ProductModel>
 
 <h1>Products</h1>
 
@@ -17,6 +18,7 @@
         </tr>
     </thead>
     <tbody>
+        @if(Model != null)
         @foreach (var item in Model)
         {
             <div class="card" style="width: 18rem;">
@@ -27,17 +29,7 @@
                     <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
             </div>
-            @*<tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>*@
+          
         }
     </tbody>
 </table>
