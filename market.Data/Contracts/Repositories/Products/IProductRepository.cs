@@ -1,4 +1,5 @@
-﻿using market.Domain.DataModels.Product;
+﻿using market.Data.Contracts.Repositories.Base;
+using market.Domain.DataEntities.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;

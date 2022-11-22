@@ -1,6 +1,6 @@
-﻿using market.Domain.DataModels.User;
+﻿using market.Domain.DataEntities.User;
 
-namespace market.Domain.DataModels.Product
+namespace market.Domain.DataEntities.Product
 {
     public class ProductEntity
     {
@@ -9,7 +9,7 @@ namespace market.Domain.DataModels.Product
         public int Price { get; set; }
         public string Description { get; set; }
 
-        public UserModel Seller { get; set; }
+        public UserEntity Seller { get; set; }
         public int SellerId { get; set; }
 
         public List<ProductCategoryModel> Categories { get; set; }

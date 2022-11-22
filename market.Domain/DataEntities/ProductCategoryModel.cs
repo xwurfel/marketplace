@@ -1,7 +1,7 @@
-﻿using market.Domain.DataModels.Category;
-using market.Domain.DataModels.Product;
+﻿using market.Domain.DataEntities.Category;
+using market.Domain.DataEntities.Product;
 
-namespace market.Domain.DataModels
+namespace market.Domain.DataEntities
 {
     public class ProductCategoryModel
     {
