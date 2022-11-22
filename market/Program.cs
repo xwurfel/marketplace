@@ -2,13 +2,26 @@ using market.Data.Context;
 using AutoMapper;
 using market.Data.Contracts.Repositories.Products;
 using market.Data.Repositories.Products;
+using Microsoft.AspNetCore.Identity;
+using market.Domain.DataEntities.User;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("AppDBContextConnection") ?? throw new InvalidOperationException("Connection string 'AppDBContextConnection' not found.");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddMvc();
 
-builder.Services.AddTransient<AppDBContext>();
+
+builder.Services.AddDbContext<AppDBContext>();
+
+builder.Services.AddIdentity<UserEntity, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<AppDBContext>()
+    .AddDefaultTokenProviders()
+    .AddDefaultUI();
+
+
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -29,6 +42,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 
@@ -40,5 +54,7 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();

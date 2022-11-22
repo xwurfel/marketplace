@@ -1,4 +1,4 @@
-﻿using market.Domain.DataModels;
+﻿using market.Domain.DataEntities;
 
 namespace market.Host.Models.Categories
 {

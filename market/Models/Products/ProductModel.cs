@@ -1,4 +1,4 @@
-﻿using market.Domain.DataModels;
+﻿using market.Domain.DataEntities;
 using market.Host.Models.Users;
 
 namespace market.Host.Models.Products

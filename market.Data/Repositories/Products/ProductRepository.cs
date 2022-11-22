@@ -1,6 +1,6 @@
 ﻿using market.Data.Context;
 using market.Data.Contracts.Repositories.Products;
-using market.Domain.DataModels.Product;
+using market.Domain.DataEntities.Product;
 
 namespace market.Data.Repositories.Products
 {

@@ -1,4 +1,4 @@
-﻿namespace market.Domain.DataModels.Category
+﻿namespace market.Domain.DataEntities.Category
 {
     public class CategoryEntity
     {

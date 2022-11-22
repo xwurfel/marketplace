@@ -1,13 +1,11 @@
 ﻿using market.Domain.Const;
 using market.Host.Models.Products;
+using Microsoft.AspNetCore.Identity;
 
 namespace market.Host.Models.Users
 {
-    public class UserModel
+    public class UserModel : IdentityUser
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string UserName { get; set; }
         public UserType UserType { get; set; }
 
         public List<ProductModel> ProductModels { get; set; }
