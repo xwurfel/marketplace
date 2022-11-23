@@ -12,12 +12,10 @@ namespace market.Host.Controllers
     public class SearchController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly AppDBContext _context;
         private readonly IProductRepository _productRepository;
 
-        public SearchController(AppDBContext context, IMapper mapper, IProductRepository productRepository)
+        public SearchController(IMapper mapper, IProductRepository productRepository)
         {
-            _context = context;
             _mapper = mapper;
             _productRepository = productRepository;
         }
