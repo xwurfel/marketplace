@@ -8,7 +8,7 @@ namespace market.Data.Contracts.Repositories.Base
 {
     public interface IBaseRepository<TEntity>
     {
-        public IEnumerable<TEntity> GetAll();
+        public IQueryable<TEntity> GetAll();
 
         public TEntity Get(int id);
 

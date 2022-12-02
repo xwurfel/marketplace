@@ -1,0 +1,29 @@
+﻿@using market.Host.Models.Products
+@model ProductModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<form method="post" asp-controller="Product" asp-action="Add">
+    <div class="input-group mb-3">
+        
+      <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1" id="Name" name="Name">
+    </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text">$</span>
+      
+      <input type="text" class="form-control" aria-label="Price" id="Price" name="Price">
+      <span class="input-group-text">.00</span>
+    </div>
+
+
+    <div class="input-group">
+        <span class="input-group-text">Description</span>
+       
+      <textarea class="form-control" aria-label="Description" id="Description" name="Description"></textarea>
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Submit"/>
+</form>

@@ -13,7 +13,7 @@ namespace market.Data.Repositories.Products
             _context = context;
         }
 
-        public IEnumerable<ProductEntity> GetAll()
+        public IQueryable<ProductEntity> GetAll()
         {
             return _context.Products.Select(x => x);
         }

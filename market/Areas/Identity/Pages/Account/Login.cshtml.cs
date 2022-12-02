@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using market.Domain.DataEntities.User;
+using System.Security.Claims;
+using market.Domain.Const;
 
 namespace market.Host.Areas.Identity.Pages.Account
 {
@@ -115,6 +117,9 @@ namespace market.Host.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                   // HttpContext.User.Identities.FirstOrDefault().AddClaim(new Claim(ClaimTypes.Role, UserType.Administrator.ToString()));
+                    
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

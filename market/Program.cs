@@ -1,5 +1,4 @@
 using market.Data.Context;
-using AutoMapper;
 using market.Data.Contracts.Repositories.Products;
 using market.Data.Repositories.Products;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using Microsoft.Extensions.Options;
+using market.Host.Areas.Identity.Factory;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AppDBContextConnection") ?? throw new InvalidOperationException("Connection string 'AppDBContextConnection' not found.");
@@ -38,16 +38,32 @@ builder.Services.AddMvc();
 
 builder.Services.AddDbContext<AppDBContext>();
 
-builder.Services.AddIdentity<UserEntity, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+
+builder.Services.AddIdentity<UserEntity, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+})
     .AddEntityFrameworkStores<AppDBContext>()
     .AddDefaultTokenProviders()
     .AddDefaultUI();
 
 
 
+
+builder.Services.AddAuthorization(options =>
+{
+    /*options.AddPolicy("RequireAdministratorRole",
+         policy => policy.RequireRole("Administrator"));*/
+});
+
+
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddTransient<IProductRepository, ProductRepository>();
+
+
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<UserEntity>, ApplicationUserClaimsPrincipalFactory>();
 
 
 var app = builder.Build();
@@ -66,7 +82,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
