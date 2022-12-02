@@ -3,12 +3,14 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options
 
-@inject IViewLocalizer Localizer
 @inject IOptions<RequestLocalizationOptions> LocOptions
+
+@inject IViewLocalizer ViewLocalizer
 
 @{
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
-    
+
+
     var cultureItems = LocOptions.Value.SupportedUICultures
         .Select(c => new SelectListItem { Value = c.Name, Text = c.NativeName })
         .ToList();
@@ -18,14 +20,19 @@
       asp-route-returnUrl="@Context.Request.Path"
       method="post" class="form-horizontal">
 
-
-    @*<button type="button" class="btn btn-link" name="culture" onclick="this.form.submit();"
-            asp-for="@requestCulture.RequestCulture.UICulture.Name"
-            asp-items="cultureItems">
-        @ViewData["Language"]
-    </button>*@
-
-    Language: <select name="culture" onchange="this.form.submit();"
-                      asp-for="@requestCulture.RequestCulture.UICulture.Name"
-                      asp-items="cultureItems"></select>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            @ViewLocalizer["Language"]
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" asp-for="culture">
+            @foreach(var el in cultureItems)
+            {
+                <li>
+                    <button type="submit" class="dropdown-item" value="@el.Value" name="culture" >
+                        @el.Text
+                    </button>
+                </li>
+            }
+        </ul>
+    </li>
 </form>

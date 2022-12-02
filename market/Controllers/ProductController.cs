@@ -14,15 +14,13 @@ namespace market.Host.Controllers
     public class ProductController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly AppDBContext _context;
         private readonly IProductRepository _productRepository;
 
 
-        public ProductController(IMapper mapper, AppDBContext appDBContext, IProductRepository productRepository)
+        public ProductController(IMapper mapper, IProductRepository productRepository)
         {
             _productRepository = productRepository;
             _mapper = mapper;
-            _context = appDBContext;
         }
 
         [Route("[action]/{id?}")]

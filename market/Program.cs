@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using Microsoft.Extensions.Options;
 using market.Host.Areas.Identity.Factory;
+using market.Host.Extentions;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Mvc.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AppDBContextConnection") ?? throw new InvalidOperationException("Connection string 'AppDBContextConnection' not found.");
@@ -25,12 +28,20 @@ builder.Services.Configure<RequestLocalizationOptions>(options => {
     options.DefaultRequestCulture = new RequestCulture(defaultCulture);
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
+    options.FallBackToParentUICultures = true;
+
 });
 
-// Add services to the container.
 builder.Services.AddControllersWithViews()
     .AddDataAnnotationsLocalization()
     .AddViewLocalization();
+
+builder.Services.AddRazorPages().AddViewLocalization();
+
+//builder.Services.TryAdd(ServiceDescriptor.Transient<IViewLocalizer, ViewLocalizer>());
+builder.Services.AddTransient<IViewLocalizer, ViewLocalizer>();
+
+builder.Services.AddScoped<RequestLocalizationCookiesMiddleware>();
 
 
 builder.Services.AddMvc();
@@ -46,7 +57,6 @@ builder.Services.AddIdentity<UserEntity, IdentityRole>(options =>
     .AddEntityFrameworkStores<AppDBContext>()
     .AddDefaultTokenProviders()
     .AddDefaultUI();
-
 
 
 
@@ -76,11 +86,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
+app.UseRequestLocalizationCookies();
 app.UseRouting();
 
 app.UseAuthentication();
