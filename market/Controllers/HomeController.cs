@@ -19,10 +19,14 @@ namespace market.Host.Controllers
 
         public IActionResult Index()
         {
-            ViewData["Privacy"] = _localizer["Privacy"];
+            /*ViewData["Privacy"] = _localizer["Privacy"];
             ViewData["Home"] = _localizer["Home"];
             ViewData["Profile"] = _localizer["Profile"];
             ViewData["Language"] = _localizer["Language"];
+            ViewData["Login"] = _localizer["Login"];
+            ViewData["Logout"] = _localizer["Logout"];
+            ViewData["Register"] = _localizer["Register"];
+            ViewData["Hello"] = _localizer["Hello"];*/
             return View();
         }
 
