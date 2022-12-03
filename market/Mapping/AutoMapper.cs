@@ -11,6 +11,7 @@ namespace market.Host.Mapping
         public AutoMapper()
         {
             CreateMap<ProductEntity, ProductModel>();
+            CreateMap<ProductModel, ProductEntity>();
             CreateMap<UserEntity, UserModel>();
             CreateMap<UserModel, UserEntity>();
         }

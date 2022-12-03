@@ -11,7 +11,8 @@ namespace market.Host.Models.Products
         public string Description { get; set; }
 
         public UserModel Seller { get; set; }
-        public int SellerId { get; set; }
+
+        public string SellerId { get; set; }
 
         public List<ProductCategoryModel> Categories { get; set; }
     }
