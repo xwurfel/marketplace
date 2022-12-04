@@ -11,6 +11,9 @@ using market.Host.Areas.Identity.Factory;
 using market.Host.Extentions;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Mvc.Localization;
+using market.Data.UnitsOfWork;
+using market.Data.Contracts.UnitsOfWork;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AppDBContextConnection") ?? throw new InvalidOperationException("Connection string 'AppDBContextConnection' not found.");
@@ -70,7 +73,9 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddTransient<IProductRepository, ProductRepository>();
+//builder.Services.AddTransient<IProductRepository, ProductRepository>();
+
+builder.Services.AddTransient<IUnitOfWork, EntityFrameworkUnitOfWork>();
 
 
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<UserEntity>, ApplicationUserClaimsPrincipalFactory>();
