@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
 using market.Data.Context;
 using market.Data.Contracts.Repositories.Products;
+using market.Data.Contracts.UnitsOfWork;
 using market.Domain.Const;
 using market.Domain.DataEntities.Product;
+using market.Domain.DataEntities.User;
 using market.Host.Models;
 using market.Host.Models.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace market.Host.Controllers
 {
@@ -15,21 +18,19 @@ namespace market.Host.Controllers
     public class ProductController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IProductRepository _productRepository;
-        private readonly AppDBContext _appDBContext;
+        private readonly IUnitOfWork _unitOfWork;
 
 
-        public ProductController(IMapper mapper, IProductRepository productRepository, AppDBContext appDBContext)
+        public ProductController(IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _productRepository = productRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
-            this._appDBContext = appDBContext;
         }
 
         [Route("[action]/{id?}")]
         public async Task<ActionResult> Index(int id)
         {
-            var product = _productRepository.Get(id);
+            var product = _unitOfWork.Products.Get(id);
 
             if (id < 0 || product == null)
             {
@@ -60,12 +61,13 @@ namespace market.Host.Controllers
 
             var productEntity = _mapper.Map<ProductEntity>(model);
 
-            var id = _appDBContext.Users.Where(x => x.UserName == User.Identity.Name).FirstOrDefault().Id;
+            var id = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value; 
 
 
-            productEntity.Seller = _appDBContext.Users.First(x => x.Id == id);
+            productEntity.SellerId = id;
 
-            _productRepository.Create(productEntity);
+            _unitOfWork.Products.Create(productEntity);
+            _unitOfWork.SaveChanges();
 
 
             return View("Done");

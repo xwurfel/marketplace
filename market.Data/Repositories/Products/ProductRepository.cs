@@ -1,6 +1,7 @@
 ﻿using market.Data.Context;
 using market.Data.Contracts.Repositories.Products;
 using market.Domain.DataEntities.Product;
+using System.Linq.Expressions;
 
 namespace market.Data.Repositories.Products
 {
@@ -13,7 +14,7 @@ namespace market.Data.Repositories.Products
             _context = context;
         }
 
-        public IQueryable<ProductEntity> GetAll()
+        public IEnumerable<ProductEntity> GetAll()
         {
             return _context.Products.Select(x => x);
         }
@@ -25,18 +26,25 @@ namespace market.Data.Repositories.Products
         public void Create(ProductEntity entity)
         {
             _context.Products.Add(entity);
-            _context.SaveChanges();
         }
         public void Update(ProductEntity entity)
         {
             _context.Products.Update(entity);
-            _context.SaveChanges();
         }
 
         public void Delete(int id)
         {
             _context.Products.Remove(_context.Products.FirstOrDefault(x => x.Id.Equals(id)));
-            _context.SaveChanges();
+        }
+
+        public IEnumerable<ProductEntity> Find(Expression<Func<ProductEntity, bool>> expression)
+        {
+            return _context.Products.Where(expression);
+        }
+
+        public IEnumerable<ProductEntity> FindTake(Expression<Func<ProductEntity, bool>> expression, int num)
+        {
+            return _context.Products.Where(expression).Take(num);
         }
 
     }
