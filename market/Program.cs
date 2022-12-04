@@ -75,7 +75,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //builder.Services.AddTransient<IProductRepository, ProductRepository>();
 
-builder.Services.AddTransient<IUnitOfWork, EntityFrameworkUnitOfWork>();
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<UserEntity>, ApplicationUserClaimsPrincipalFactory>();

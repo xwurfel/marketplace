@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace market.Data.UnitsOfWork
 {
-    public class EntityFrameworkUnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDBContext _context;
 
-        public EntityFrameworkUnitOfWork(AppDBContext context)
+        public UnitOfWork(AppDBContext context)
         {
             _context = context;
             Products = new ProductRepository(_context);
