@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using market.Data.Context;
 using market.Data.Contracts.Repositories.Products;
+using market.Data.Contracts.UnitsOfWork;
 using market.Host.Models.Products;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +13,12 @@ namespace market.Host.Controllers
     public class SearchController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IProductRepository _productRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public SearchController(IMapper mapper, IProductRepository productRepository)
+        public SearchController(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
-            _productRepository = productRepository;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -31,7 +32,7 @@ namespace market.Host.Controllers
                 return View();
             }
 
-            var goods = _productRepository.GetAll().Where(x => x.Name.Contains(request)).Take(20);
+            var goods = _unitOfWork.Products.FindTake(x => x.Name.Contains(request), 20);
 
 
             var model = goods.Select(x => _mapper.Map<ProductModel>(x));

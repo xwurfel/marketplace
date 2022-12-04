@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
 using market.Data.Context;
 using market.Data.Contracts.Repositories.Products;
+using market.Data.Contracts.UnitsOfWork;
 using market.Domain.Const;
 using market.Domain.DataEntities.Product;
+using market.Domain.DataEntities.User;
+using market.Host.Models;
 using market.Host.Models.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace market.Host.Controllers
 {
@@ -14,24 +18,25 @@ namespace market.Host.Controllers
     public class ProductController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IProductRepository _productRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
 
-        public ProductController(IMapper mapper, IProductRepository productRepository)
+        public ProductController(IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _productRepository = productRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         [Route("[action]/{id?}")]
         public async Task<ActionResult> Index(int id)
         {
-            if (id < 0)
+            var product = _unitOfWork.Products.Get(id);
+
+            if (id < 0 || product == null)
             {
-                return View();
+                return View("Error", new ErrorViewModel());
             }
 
-            var product = _productRepository.Get(id);
 
             ProductModel productModel = _mapper.Map<ProductModel>(product);
 
@@ -40,13 +45,10 @@ namespace market.Host.Controllers
         }
 
 
-        [Authorize(Roles = "Administrator")]
-
+        [Authorize]
         [Route("[action]/")]
         public async Task<ActionResult> Add()
         {
-            var a = HttpContext.User.Identities.FirstOrDefault();
-
 
             return View();
         }
@@ -59,10 +61,16 @@ namespace market.Host.Controllers
 
             var productEntity = _mapper.Map<ProductEntity>(model);
 
-            _productRepository.Create(productEntity);
+            var id = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value; 
 
 
-            return View();
+            productEntity.SellerId = id;
+
+            _unitOfWork.Products.Create(productEntity);
+            _unitOfWork.SaveChanges();
+
+
+            return View("Done");
         }
     }
 }

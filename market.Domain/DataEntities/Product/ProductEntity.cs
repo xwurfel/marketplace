@@ -10,7 +10,8 @@ namespace market.Domain.DataEntities.Product
         public string Description { get; set; }
 
         public UserEntity Seller { get; set; }
-        public int SellerId { get; set; }
+
+        public string SellerId { get; set; }
 
         public List<ProductCategoryModel> Categories { get; set; }
     }
