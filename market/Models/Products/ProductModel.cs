@@ -1,4 +1,4 @@
-﻿using market.Domain.DataEntities;
+﻿using market.Host.Models.Categories;
 using market.Host.Models.Users;
 
 namespace market.Host.Models.Products
@@ -14,6 +14,6 @@ namespace market.Host.Models.Products
 
         public string SellerId { get; set; }
 
-        public List<ProductCategoryModel> Categories { get; set; }
+        public List<CategoryModel> Categories { get; set; }
     }
 }

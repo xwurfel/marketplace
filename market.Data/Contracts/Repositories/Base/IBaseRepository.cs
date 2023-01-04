@@ -9,8 +9,6 @@ namespace market.Data.Contracts.Repositories.Base
 {
     public interface IBaseRepository<TEntity, in TKey> where TEntity : class
     {
-        public IEnumerable<TEntity> GetAll();
-
         public TEntity Get(TKey id);
 
         public void Create(TEntity entity);

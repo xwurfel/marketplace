@@ -1,14 +1,17 @@
 ﻿@page
+@using System.Security.Claims
 @model IndexModel
 @{
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
+@inject SignInManager<UserEntity> SignInManager
+
 <h3>@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <form id="profile-form" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
@@ -23,7 +26,17 @@
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>
+    @*//TODO admintools*@
+    @if (User.Identities.FirstOrDefault().Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value == "Administrator")
+    {
+        <div class="col-md-2">
+            <a class="link" asp-controller="Administrator" asp-action="Index">Admin panel</a>
+        </div>
+    }
 </div>
+
+
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

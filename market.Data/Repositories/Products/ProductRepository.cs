@@ -42,9 +42,9 @@ namespace market.Data.Repositories.Products
             return _context.Products.Where(expression);
         }
 
-        public IEnumerable<ProductEntity> FindTake(Expression<Func<ProductEntity, bool>> expression, int num)
+        public IEnumerable<ProductEntity> FindSkipTake(Expression<Func<ProductEntity, bool>> expression, int skip, int take)
         {
-            return _context.Products.Where(expression).Take(num);
+            return _context.Products.Where(expression).Skip(skip).Take(take);
         }
 
     }
