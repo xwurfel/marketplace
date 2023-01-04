@@ -1,19 +1,16 @@
 using market.Data.Context;
-using market.Data.Contracts.Repositories.Products;
-using market.Data.Repositories.Products;
-using Microsoft.AspNetCore.Identity;
+using market.Data.Contracts.UnitsOfWork;
+using market.Data.UnitsOfWork;
 using market.Domain.DataEntities.User;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Localization;
-using System.Globalization;
-using Microsoft.Extensions.Options;
 using market.Host.Areas.Identity.Factory;
 using market.Host.Extentions;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;    
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Localization;
-using market.Data.UnitsOfWork;
-using market.Data.Contracts.UnitsOfWork;
-
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AppDBContextConnection") ?? throw new InvalidOperationException("Connection string 'AppDBContextConnection' not found.");
@@ -27,6 +24,7 @@ var supportedCultures = new[]
     new CultureInfo(defaultCulture),
     new CultureInfo("uk")
 };
+
 builder.Services.Configure<RequestLocalizationOptions>(options => {
     options.DefaultRequestCulture = new RequestCulture(defaultCulture);
     options.SupportedCultures = supportedCultures;
@@ -39,19 +37,24 @@ builder.Services.AddControllersWithViews()
     .AddDataAnnotationsLocalization()
     .AddViewLocalization();
 
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddRazorPages().AddViewLocalization();
 
-//builder.Services.TryAdd(ServiceDescriptor.Transient<IViewLocalizer, ViewLocalizer>());
 builder.Services.AddTransient<IViewLocalizer, ViewLocalizer>();
 
 builder.Services.AddScoped<RequestLocalizationCookiesMiddleware>();
 
-
 builder.Services.AddMvc();
 
-
 builder.Services.AddDbContext<AppDBContext>();
-
 
 builder.Services.AddIdentity<UserEntity, IdentityRole>(options =>
 {
@@ -61,22 +64,43 @@ builder.Services.AddIdentity<UserEntity, IdentityRole>(options =>
     .AddDefaultTokenProviders()
     .AddDefaultUI();
 
+IConfiguration configuration = null;
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+
+})
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/account/google-login";
+    })
+    .AddGoogle(options =>
+    {
+        options.ClientId = configuration.GetValue<string>("ClientId");
+        options.ClientSecret = configuration.GetValue<string>("ClientSecret");
+
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+    });
+
+/*
+builder.Services.AddAuthentication();
+*/
 
 
 builder.Services.AddAuthorization(options =>
 {
-    /*options.AddPolicy("RequireAdministratorRole",
-         policy => policy.RequireRole("Administrator"));*/
+    options.AddPolicy("RequireAdministratorRole",
+         policy => policy.RequireRole("Administrator"));
 });
 
 
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-//builder.Services.AddTransient<IProductRepository, ProductRepository>();
-
-builder.Services.AddTransient<IUnitOfWork, EntityFrameworkUnitOfWork>();
-
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<UserEntity>, ApplicationUserClaimsPrincipalFactory>();
 
@@ -92,6 +116,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 
+configuration = app.Services.GetRequiredService<IConfiguration>();
+
 
 
 app.UseHttpsRedirection();
@@ -104,6 +130,8 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 
 app.MapControllerRoute(

@@ -1,0 +1,24 @@
+﻿@using market.Host.Models.Users
+
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model UserModel
+
+<h1>Profile</h1>
+
+@Model.UserName
+<br />
+@Model.UserType
+<br />
+@Model.Id
+<div style="display: flex; flex-wrap: wrap;">
+    @foreach (var prod in Model.ProductModels)
+    {
+        <a style="padding: 10px; margin: 10px;" asp-controller="Product" asp-action="Index" asp-route-id="@prod.Id">@prod.Name</a>
+        <br />
+    }
+</div>
+

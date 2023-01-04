@@ -4,6 +4,8 @@ using market.Domain.DataEntities.Category;
 using market.Domain.DataEntities.Product;
 using market.Domain.DataEntities.User;
 using market.Domain.DataEntities;
+using market.Domain.DataEntities.Cart;
+using market.Domain.DataEntities.Order;
 
 namespace market.Data.Context
 {
@@ -20,6 +22,13 @@ namespace market.Data.Context
         public DbSet<ProductEntity> Products { get; set; }
 
         public DbSet<CategoryEntity> Categories { get; set; }
+
+        public DbSet<CartEntity> Carts { get; set; }
+
+        public DbSet<OrderEntity> Orders { get; set; }
+
+        public DbSet<OrderDetailsEntity> OrderDetails { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -39,6 +48,12 @@ namespace market.Data.Context
                 .HasOne(pt => pt.Category)
                 .WithMany(t => t.Products)
                 .HasForeignKey(pt => pt.CategoryId);
+
+            modelBuilder.Entity<CartEntity>().HasKey(x => x.RecordId);
+
+            modelBuilder.Entity<OrderEntity>().HasKey(x => x.OrderId);
+
+            modelBuilder.Entity<OrderDetailsEntity>().HasKey(x => x.OrderDetailId);
 
             base.OnModelCreating(modelBuilder);
         }

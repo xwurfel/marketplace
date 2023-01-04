@@ -1,7 +1,21 @@
-﻿@using market.Host.Models.Products
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Identity;
+@using market.Domain.DataEntities.User;
+@using market.Host.Models.Products
+
+@inject SignInManager<UserEntity> SignInManager
 
 @{
     ViewData["Title"] = "Index";
+
+    string? id = null;
+    string? role = null;
+    @if (SignInManager.IsSignedIn(User))
+    {
+        id = User.Identities.Single().Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value.ToString();
+        role = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value.ToString();
+        
+    }
 }
 
 <h1>Product info</h1>
@@ -11,8 +25,35 @@
 <div>
     <h3>@Model.Name</h3>
     @Model.Description
+    <br />
     @Model.Price
+    <br />
+   
+    @if (!(string.IsNullOrEmpty(id) && string.IsNullOrEmpty(role)))
+    {
+        @if (Model.SellerId.Equals(id) || role.Equals("Administrator") || role.Equals("Moderator"))
+        {
+                <a class="btn-link" asp-controller="Product" asp-action="Delete" asp-route-id="@Model.Id">
+                    DELETE
+                </a>
 
+                <br />
+                @Model.SellerId
+                <br />
+                <a href="/Search/profile?request=@Model.SellerId">
+                    Seller
+                </a>
+                <br />
+        }
+    }
+
+
+    <br />
+
+    <p class="button">
+        @Html.ActionLink("Add tocart", "AddToCart", 
+        "ShoppingCart", new { id = Model.Id }, "")
+    </p>
 
 </div>
 

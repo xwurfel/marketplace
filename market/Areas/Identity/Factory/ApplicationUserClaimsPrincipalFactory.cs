@@ -21,7 +21,7 @@ namespace market.Host.Areas.Identity.Factory
             var identity = await base.GenerateClaimsAsync(user);
 
             identity.AddClaim(new Claim(ClaimTypes.Role, user.UserType.ToString()));
-            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+           // identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
 
 
             return identity;

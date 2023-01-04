@@ -6,6 +6,7 @@ namespace market.Data.Contracts.Repositories.Products
 {
     public interface IProductRepository : IBaseRepository<ProductEntity, int> 
     {
-        public IEnumerable<ProductEntity> FindTake(Expression<Func<ProductEntity, bool>> expression, int num);
+        public IEnumerable<ProductEntity> GetAll();
+        public IEnumerable<ProductEntity> FindSkipTake(Expression<Func<ProductEntity, bool>> expression, int skip, int take);
     }
 }

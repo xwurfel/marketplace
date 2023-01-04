@@ -10,6 +10,7 @@ using market.Host.Models.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 
 namespace market.Host.Controllers
@@ -49,7 +50,8 @@ namespace market.Host.Controllers
         [Route("[action]/")]
         public async Task<ActionResult> Add()
         {
-
+            SelectList categories = new SelectList(_unitOfWork.Categories.GetAll(), "Id", "Name");
+            ViewBag.Categories = categories;
             return View();
         }
 
@@ -61,10 +63,8 @@ namespace market.Host.Controllers
 
             var productEntity = _mapper.Map<ProductEntity>(model);
 
-            var id = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value; 
+            productEntity.SellerId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
-
-            productEntity.SellerId = id;
 
             _unitOfWork.Products.Create(productEntity);
             _unitOfWork.SaveChanges();
@@ -72,5 +72,21 @@ namespace market.Host.Controllers
 
             return View("Done");
         }
+
+        [Authorize(Policy = "RequireAdministratorRole")]
+        [Route("[action]/{id?}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            if (id < 0)
+            {
+                return View("Error", new ErrorViewModel());
+            }
+
+            _unitOfWork.Products.Delete(id);
+            _unitOfWork.SaveChanges();
+
+            return View();
+        }
+
     }
 }

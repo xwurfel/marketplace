@@ -1,12 +1,35 @@
-﻿@using market.Host.Models.Products
+﻿@using market.Host.Models.Products;
+
 
 @{
     ViewData["Title"] = "Index";
 }
 
-@model List<ProductModel>
+@model IEnumerable<ProductModel>
+
 
 <h1>Products</h1>
+
+<div>
+    Filter by Price:
+    
+    <form asp-action="Search" method="get" asp-route-request="@ViewBag.Req" >
+        <input type="hidden" value="@ViewBag.Req" id="request" name="request"/>
+        From:
+        <input type="number" id="start" name="start"/>
+        To:
+        <input type="number" id="finish" name="finish"/>
+
+
+        <input type="submit" value="Submit"/> 
+    </form>
+    
+    Filter by Categories:
+    
+
+
+
+</div>
 
 <table class="table">
     <thead>
@@ -20,17 +43,23 @@
     <tbody>
         <div class="align-items-center" style="display: flex; flex-wrap: wrap">
 
-        @if(Model != null)
-        @foreach (var item in Model)
+        @if(Model != null && Model.Any())
         {
-            <div class="card" style="width: 18rem; margin: 18px;">
-                <img src="https://images.unsplash.com/photo-1546587348-d12660c30c50?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8bmF0dXJhbHxlbnwwfHwwfHw%3D&w=1000&q=80" class="card-img-top" alt="nature">
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
-                    <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
-                    <a asp-controller="Product" asp-action="Index" asp-route-id="@item.Id" class="btn btn-primary">More info</a>
+            @foreach (var item in Model)
+            {
+                <div class="card" style="width: 18rem; margin: 18px;">
+                    <img src="https://images.unsplash.com/photo-1546587348-d12660c30c50?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8bmF0dXJhbHxlbnwwfHwwfHw%3D&w=1000&q=80" class="card-img-top" alt="nature">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Description)</p>
+                        <a asp-controller="Product" asp-action="Index" asp-route-id="@item.Id" class="btn btn-primary">More info</a>
+                    </div>
                 </div>
-            </div>
+            }
+        }
+        else
+        {
+            <h2>Page is empty!</h2>
         }
         </div>
     </tbody>
@@ -39,6 +68,11 @@
 </table>
 
 
-
-
-
+<div style="text-align: center;">
+    @if(ViewBag.Page != 1)
+    {
+        <a href="~/Search?request=@ViewBag.Req&page=@(ViewBag.Page - 1)">Previous</a>
+    }
+   
+         <a href="~/Search?request=@ViewBag.Req&page=@(ViewBag.Page + 1)">Next</a>
+</div>

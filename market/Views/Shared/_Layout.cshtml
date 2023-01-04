@@ -28,14 +28,12 @@
                             @await Html.PartialAsync("_SelectLanguagePartial")
                         </div>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@ViewLocalizer["Home"]</a>
-                        </li>
-                        
+                       
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@ViewLocalizer["Privacy"]</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingCart" asp-action="Index">@ViewLocalizer["Cart"]</a>
                         </li>
+                        
 
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Add">@ViewLocalizer["Sell"]</a>
@@ -44,7 +42,7 @@
                 
                 </div>
                 <div class="container-fluid">
-                    <form class="d-flex" action="~/Search/Search"  method="post">
+                    <form class="d-flex" asp-controller="Search" asp-action="Search" method="get">
                         <input  class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="request">
                         <button  class="btn btn-outline-success" type="submit">Search</button>
                     </form>
@@ -62,8 +60,8 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <footer class="border-top footer text-muted fixed-bottom">
+        <div class="container" style="padding: 15px;">
             &copy; 2022 - market - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
